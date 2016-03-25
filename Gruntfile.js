@@ -28,6 +28,8 @@ module.exports = function (grunt) {
                     launch_in_ci: ['PhantomJS'],
                     before_tests: 'grunt jshint',
                     serve_files: [
+                        'node_modules/lodash/lodash.js',
+                        'node_modules/jquery/dist/jquery.js',
                         'node_modules/sinon/pkg/sinon.js',
                         'src/**/*.js',
                         'test/**/*.js'
@@ -44,6 +46,8 @@ module.exports = function (grunt) {
 
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-testem-mincer');
+
+    grunt.registerTask('default', ['testem:ci:unit']);
 
 };
 
