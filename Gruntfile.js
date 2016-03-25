@@ -47,7 +47,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-testem-mincer');
 
-    grunt.registerTask('default', ['testem:ci:unit']);
+    grunt.registerTask('default', ['testem:run:unit']);
 
 };
 
