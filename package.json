@@ -1,0 +1,17 @@
+{
+  "name": "angular-remake",
+  "description": "Traktopel says - drinking raw egg a day builds a man",
+  "version": "0.0.1",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/karcl/angular-remake.git"
+  },
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-jshint": "^1.0.0",
+    "grunt-testem-mincer": "^0.5.18",
+    "phantomjs": "^2.1.3",
+    "sinon": "^1.17.3"
+  }
+}
