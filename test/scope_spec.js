@@ -87,6 +87,66 @@ describe('Scope', function () {
             scope.$digest();
             expect(oldValueGiven).toBe(0xC0FFEE);
         });
+
+        it('may have watchers that omit the listener function', function () {
+            var watchFn = jasmine.createSpy().and.returnValue('something');
+            scope.$watch(watchFn);
+
+            scope.$digest();
+
+            expect(watchFn).toHaveBeenCalled();
+        });
+
+        it('triggers chained watchers in the same digest', function () {
+            scope.name = 'Yennefer';
+
+            scope.$watch(
+                function (scope) { return scope.nameUpper; },
+                function (newValue, oldValue, scope) {
+                    if (newValue) {
+                        scope.initial = newValue.substring(0, 1) + '.';
+                    }
+                }
+            );
+
+            scope.$watch(
+                function (scope) { return scope.name; },
+                function (newValue, oldValue, scope) {
+                    if (newValue) {
+                        scope.nameUpper = newValue.toUpperCase();
+                    }
+                }
+            );
+
+            scope.$digest();
+            expect(scope.initial).toBe('Y.');
+
+            scope.name = 'Geralt';
+            scope.$digest();
+            expect(scope.initial).toBe('G.');
+        });
+
+        it('gives up on the watches after 10 iterations', function () {
+            scope.counterA = 0;
+            scope.counterB = 0;
+
+            scope.$watch(
+                function (scope) { return scope.counterA; },
+                function (newValue, oldValue, scope) {
+                    scope.counterB++;
+                }
+            );
+
+            scope.$watch(
+                function (scope) { return scope.counterB; },
+                function (newValue, oldValue, scope) {
+                    scope.counterA++;
+                }
+            );
+
+            expect((function () { scope.$digest(); })).toThrow();
+        });
+
     });
 
 });
