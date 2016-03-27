@@ -19,6 +19,6 @@
     "lodash": "^4.6.1"
   },
   "scripts": {
-      "test": "grunt testem:run:unit"
+      "test": "grunt testem:ci:unit"
   }
 }
