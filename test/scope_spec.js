@@ -46,7 +46,7 @@ describe('Scope', function () {
             scope.$watch(
                     function (scope) { return scope.someValue; },
                     function (newValue, oldValue, scope) { scope.counter++; }
-            );
+                    );
 
             expect(scope.counter).toBe(0);
 
@@ -69,7 +69,7 @@ describe('Scope', function () {
             scope.$watch(
                     function (scope) { return scope.someValue; },
                     function (newValue, oldValue, scope) { scope.counter++; }
-            );
+                    );
 
             scope.$digest();
             expect(scope.counter).toBe(1);
@@ -82,7 +82,7 @@ describe('Scope', function () {
             scope.$watch(
                     function (scope) { return scope.someValue; },
                     function (newValue, oldValue, scope) { oldValueGiven = oldValue; }
-            );
+                    );
 
             scope.$digest();
             expect(oldValueGiven).toBe(0xC0FFEE);
@@ -101,22 +101,22 @@ describe('Scope', function () {
             scope.name = 'Yennefer';
 
             scope.$watch(
-                function (scope) { return scope.nameUpper; },
-                function (newValue, oldValue, scope) {
-                    if (newValue) {
-                        scope.initial = newValue.substring(0, 1) + '.';
+                    function (scope) { return scope.nameUpper; },
+                    function (newValue, oldValue, scope) {
+                        if (newValue) {
+                            scope.initial = newValue.substring(0, 1) + '.';
+                        }
                     }
-                }
-            );
+                    );
 
             scope.$watch(
-                function (scope) { return scope.name; },
-                function (newValue, oldValue, scope) {
-                    if (newValue) {
-                        scope.nameUpper = newValue.toUpperCase();
+                    function (scope) { return scope.name; },
+                    function (newValue, oldValue, scope) {
+                        if (newValue) {
+                            scope.nameUpper = newValue.toUpperCase();
+                        }
                     }
-                }
-            );
+                    );
 
             scope.$digest();
             expect(scope.initial).toBe('Y.');
@@ -131,18 +131,18 @@ describe('Scope', function () {
             scope.counterB = 0;
 
             scope.$watch(
-                function (scope) { return scope.counterA; },
-                function (newValue, oldValue, scope) {
-                    scope.counterB++;
-                }
-            );
+                    function (scope) { return scope.counterA; },
+                    function (newValue, oldValue, scope) {
+                        scope.counterB++;
+                    }
+                    );
 
             scope.$watch(
-                function (scope) { return scope.counterB; },
-                function (newValue, oldValue, scope) {
-                    scope.counterA++;
-                }
-            );
+                    function (scope) { return scope.counterB; },
+                    function (newValue, oldValue, scope) {
+                        scope.counterA++;
+                    }
+                    );
 
             expect((function () { scope.$digest(); })).toThrow();
         });
@@ -154,12 +154,12 @@ describe('Scope', function () {
 
             _.times(100, function (i) {
                 scope.$watch(
-                    function (scope) {
-                        watchExecutions++;
-                        return scope.array[i];
-                    },
-                    function (newV, oldV, scope) { }
-                );
+                        function (scope) {
+                            watchExecutions++;
+                            return scope.array[i];
+                        },
+                        function (newV, oldV, scope) { }
+                        );
             });
 
             scope.$digest();
@@ -175,16 +175,16 @@ describe('Scope', function () {
             scope.counter = 0;
 
             scope.$watch(
-                function (scope) { return scope.aValue; },
-                function (newValue, oldValue, scope) {
-                    scope.$watch(
-                        function (scope) { return scope.aValue; },
-                        function (newValue, oldValue, scope) {
-                            scope.counter++;
-                        }
+                    function (scope) { return scope.aValue; },
+                    function (newValue, oldValue, scope) {
+                        scope.$watch(
+                                function (scope) { return scope.aValue; },
+                                function (newValue, oldValue, scope) {
+                                    scope.counter++;
+                                }
+                                );
+                    }
                     );
-                }
-            );
 
             scope.$digest();
             expect(scope.counter).toBe(1);
@@ -195,12 +195,12 @@ describe('Scope', function () {
             scope.counter = 0;
 
             scope.$watch(
-                function (scope) { return scope.aValue; },
-                function (newValue, oldValue, scope) {
-                    scope.counter++;
-                },
-                true
-            );
+                    function (scope) { return scope.aValue; },
+                    function (newValue, oldValue, scope) {
+                        scope.counter++;
+                    },
+                    true
+                    );
 
             scope.$digest();
             expect(scope.counter).toBe(1);
@@ -215,11 +215,11 @@ describe('Scope', function () {
             scope.counter = 0;
 
             scope.$watch(
-                function (scope) { return scope.number; },
-                function (newValue, oldValue, scope) {
-                    scope.counter++;
-                }
-            );
+                    function (scope) { return scope.number; },
+                    function (newValue, oldValue, scope) {
+                        scope.counter++;
+                    }
+                    );
 
             scope.$digest();
             expect(scope.counter).toBe(1);
@@ -227,6 +227,25 @@ describe('Scope', function () {
             scope.$digest();
             expect(scope.counter).toBe(1);
         });
+
+        it('executes $eval\'ed function and returns result', function () {
+            scope.aValue = 42;
+
+            var result = scope.$eval(function (scope) {
+                return scope.aValue;
+            });
+
+            expect(result).toBe(42);
+        });
+
+        it('passes the second $eval argument straight through', function () {
+            scope.aValue = 42;
+            var result = scope.$eval(function (scope, arg) {
+                return scope.aValue + arg;
+            }, 2);
+            expect(result).toBe(44);
+        });
+
 
     });
 

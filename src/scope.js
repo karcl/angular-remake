@@ -66,3 +66,7 @@ Scope.prototype.$digest = function () {
         }
     } while (dirty);
 };
+
+Scope.prototype.$eval =function (expr, locals) {
+    return expr(this, locals);
+};
